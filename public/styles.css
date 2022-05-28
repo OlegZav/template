@@ -12,7 +12,6 @@
 .app {
     display: grid;
     height: 100vh;
-    overflow: hidden;
     grid-template-columns: 241px 1fr;
     grid-template-rows: min-content 1fr min-content;
     font-family: 'spotify-circular-cyrillic', Helvetica, Arial, sans-serif;
@@ -50,15 +49,18 @@
     padding: 10px;
 }
 
+.name {
+    text-align: center;
+}
+
 .content {
     display: flex;
     background: linear-gradient(to top left, #222, #121212);
-    align-items: center;
-    text-align: center;
-    justify-content: center;
+    overflow: scroll;
+    overflow-x: hidden;
     flex-direction: column;
     color: white;
-    line-height: 40px;
+    line-height: 30px;
 }
 
 .footer {
@@ -96,4 +98,69 @@
     color: inherit;
     font-size: 12px;
     padding: 3px;
+}
+
+.artist_data {
+    display: flex;
+    width: auto;
+}
+
+.picture {
+    background: #1c1c1c00;
+    border: none;
+}
+
+.data_container {
+    margin-right: 0px;
+    margin-left: auto;
+}
+
+.data {
+    display: flex;
+}
+
+.playlist-name {
+    color: #fff;
+    text-align: left;
+    padding-left: 7px;
+}
+
+.number {
+    color: #4bdf80;
+}
+
+.artist_name {
+    font-size: 20px;
+    color: #fff;
+    font-family: 'spotify-circular-cyrillic', Helvetica, Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.card {
+    display: block;
+    padding: 10px;
+    background-color: #343434;
+    border-radius: 10px;
+    position: relative;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+.card:hover {
+    border-radius: 10px;
+    box-shadow: 3px 3px #4bdf80, -1em 0 0.4em #1DB954;
+}
+
+.song_artist_name {
+    font-size: 14px;
+    color: #808080;
+    margin-left: 10px;
+    font-family: 'spotify-circular-cyrillic', Helvetica, Arial, sans-serif;
+}
+
+.data_search {
+    align-items: center;
 }
