@@ -1,28 +1,33 @@
 /** Необходимые константы */
-const apiKey = "d1000af359abdc5da2cf58cb576e8c75";
-const getUrl = `http://ws.audioscrobbler.com/2.0/?method=tag.gettopalbums&tag=edm&api_key=d1000af359abdc5da2cf58cb576e8c75&format=json`;
+const KEY = "d1000af359abdc5da2cf58cb576e8c75";
+const MAIN_URL = `http://ws.audioscrobbler.com/2.0/?method=tag.gettopalbums&tag=edm&api_key=d1000af359abdc5da2cf58cb576e8c75&format=json`;
 
 /** Вызов главного метода */
 getTop();
 
 /** Поисковая функция */
 document.querySelector(".header__search").addEventListener("keydown", (e) => {
-	if (e.key === "Enter") {
+	if (e.keyCode === 13) {
 		if (e.target.value === "") {
-			document.querySelector(".content-body").innerHTML = "";
-			document.querySelector(".name").innerHTML = "Популярные исполнители: ";
+			let content = document.querySelector(".content-body");
+			content.textContent = "";
+			let heading = document.querySelector(".name");
+			heading.textContent = "Популярные исполнители: ";
 			getTop();
 		} else {
 			getData(
-					`http://ws.audioscrobbler.com/2.0/?method=track.search&limit=100&track=${e.target.value}&api_key=${apiKey}&format=json`
+					`http://ws.audioscrobbler.com/2.0/?method=track.search&limit=100&track=${e.target.value}&api_key=${KEY}&format=json`
 				)
 				.then((result) => {
-					document.querySelector(".content-body").innerHTML = "";
-					document.querySelector(".name").innerHTML = "Результаты поиска: ";
+					let content = document.querySelector(".content-body");
+					content.textContent = "";
+					let heading = document.querySelector(".name");
+					heading.textContent = "Результаты поиска: ";
 					result.results.trackmatches.track.forEach((item) => {
 						searchValues(item);
 					});
-				});
+				})
+				.catch((e) => console.log(e));
 		}
 	}
 });
@@ -37,7 +42,7 @@ function getData(url) {
 
 /** Обработка информации о топ-исполнителях  */
 function getTop() {
-	getData(getUrl).then((data) =>
+	getData(MAIN_URL).then((data) =>
 		data.albums.album.forEach((item) => {
 			topArtists(item);
 		})
@@ -46,10 +51,10 @@ function getTop() {
 
 /** Создание карточек с информацией о популярных композициях */
 function topArtists(item) {
-	container = document.querySelector(".content-body");
+	let container = document.querySelector(".content-body");
 
-	element = document.createElement("div");
-	artistData = document.createElement('div');
+	let element = document.createElement("div");
+	let artistData = document.createElement('div');
 
 	element.className = "card";
 	artistData.className = "artist_data";
@@ -63,8 +68,8 @@ function topArtists(item) {
 
 /** Создание иконки трека */
 function addImage() {
-	buttonData = document.createElement("button");
-	img = document.createElement('img');
+	let buttonData = document.createElement("button");
+	let img = document.createElement('img');
 
 	buttonData.className = "picture";
 
@@ -80,7 +85,7 @@ function addImage() {
 
 /** Создание поля с названием трека */
 function addTrackName(item) {
-	pName = document.createElement('p');
+	let pName = document.createElement('p');
 	pName.className = "artist_name";
 	pName.appendChild(document.createTextNode(item.name));
 	return pName;
@@ -88,7 +93,7 @@ function addTrackName(item) {
 
 /** Создание столбца с информацией о треке */
 function addContainer(item) {
-	dataContainer = document.createElement('div');
+	let dataContainer = document.createElement('div');
 
 	dataContainer.className = "data_container";
 
@@ -101,7 +106,7 @@ function addContainer(item) {
 
 /** Создание информации об исполнителе */
 function addArtist(item) {
-	dataAlbum = document.createElement('div');
+	let dataAlbum = document.createElement('div');
 
 	dataAlbum.className = "data";
 
@@ -113,7 +118,7 @@ function addArtist(item) {
 
 /** Создание информации о позиции трека */
 function addPlace(item) {
-	dataPlace = document.createElement('div');
+	let dataPlace = document.createElement('div');
 
 	dataPlace.className = "data";
 
@@ -125,7 +130,7 @@ function addPlace(item) {
 
 /** Создание поля исполнителя */
 function addArtistLabel() {
-	pAlbum = document.createElement('p');
+	let pAlbum = document.createElement('p');
 	pAlbum.className = "playlist-name";
 	pAlbum.appendChild(document.createTextNode("Исполнитель альбома: "));
 	return pAlbum;
@@ -133,13 +138,13 @@ function addArtistLabel() {
 
 /** Создание значения-ссылки об исполнителе */
 function addArtistValue(item) {
-	pAlbumNumber = document.createElement('p');
-	aElement = document.createElement("a");
+	let pAlbumNumber = document.createElement('p');
+	let aElement = document.createElement("a");
 
 	pAlbumNumber.className = "playlist-name number";
 
 	aElement.href = item.url;
-	aElement.style = "color: #4bdf80";
+	aElement.className = "value";
 
 	pAlbumNumber.appendChild(aElement);
 	aElement.appendChild(document.createTextNode(item.artist.name));
@@ -149,7 +154,7 @@ function addArtistValue(item) {
 
 /** Создание поля позиции трека */
 function addPlaceLabel() {
-	pPlace = document.createElement('p');
+	let pPlace = document.createElement('p');
 	pPlace.className = "playlist-name";
 	pPlace.appendChild(document.createTextNode("Место: "));
 	return pPlace;
@@ -157,7 +162,7 @@ function addPlaceLabel() {
 
 /** Создание значения позиции трека */
 function addPlaceValue(item) {
-	pPlaceNumber = document.createElement('p');
+	let pPlaceNumber = document.createElement('p');
 	pPlaceNumber.className = "playlist-name number";
 	pPlaceNumber.appendChild(document.createTextNode(item["@attr"].rank));
 	return pPlaceNumber;
@@ -165,7 +170,7 @@ function addPlaceValue(item) {
 
 /** Создание информации о треке */
 function addInfo(item) {
-	divData = document.createElement('div');
+	let divData = document.createElement('div');
 
 	divData.appendChild(addInfoTrack(item));
 	divData.appendChild(addInfoArtist(item));
@@ -175,7 +180,7 @@ function addInfo(item) {
 
 /** Создание информации о названии трека */
 function addInfoTrack(item) {
-	pName = document.createElement('p');
+	let pName = document.createElement('p');
 	pName.className = "artist_name";
 	pName.appendChild(document.createTextNode(item.name));
 	return pName;
@@ -183,7 +188,7 @@ function addInfoTrack(item) {
 
 /** Создание информации об исполнителе трека */
 function addInfoArtist(item) {
-	pArtist = document.createElement('p');
+	let pArtist = document.createElement('p');
 	pArtist.className = "song_artist_name";
 	pArtist.appendChild(document.createTextNode(item.artist));
 	return pArtist;
@@ -191,8 +196,8 @@ function addInfoArtist(item) {
 
 /** Создание столбца с информацией о прослушиваниях */
 function addContainerListener(item) {
-	dataContainer = document.createElement('div');
-	dataAlbum = document.createElement('div');
+	let dataContainer = document.createElement('div');
+	let dataAlbum = document.createElement('div');
 
 	dataContainer.className = "data_container";
 	dataAlbum.className = "data";
@@ -206,7 +211,7 @@ function addContainerListener(item) {
 
 /** Создание поля прослушиваний трека */
 function addListenerLabel() {
-	pAlbum = document.createElement('p');
+	let pAlbum = document.createElement('p');
 	pAlbum.className = "playlist-name";
 	pAlbum.appendChild(document.createTextNode("Слушателей: "));
 	return pAlbum;
@@ -214,13 +219,13 @@ function addListenerLabel() {
 
 /** Создание значения-ссылки о прослушиваниях */
 function addListenerValue(item) {
-	pAlbumNumber = document.createElement('p');
-	aElement = document.createElement("a");
+	let pAlbumNumber = document.createElement('p');
+	let aElement = document.createElement("a");
 
 	pAlbumNumber.className = "playlist-name number";
 
 	aElement.href = item.url;
-	aElement.style = "color: #4bdf80";
+	aElement.className = "value";
 
 	pAlbumNumber.appendChild(aElement);
 	aElement.appendChild(document.createTextNode(item.listeners));
@@ -230,10 +235,10 @@ function addListenerValue(item) {
 
 /** Создание результатов поиска */
 function searchValues(item) {
-	container = document.querySelector(".content-body");
+	let container = document.querySelector(".content-body");
 
-	element = document.createElement("div");
-	artistData = document.createElement('div');
+	let element = document.createElement("div");
+	let artistData = document.createElement('div');
 
 	element.className = "card";
 	artistData.className = "artist_data";
