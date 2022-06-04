@@ -1,6 +1,7 @@
 /** Необходимые константы */
 const KEY = "d1000af359abdc5da2cf58cb576e8c75";
 const MAIN_URL = `http://ws.audioscrobbler.com/2.0/?method=tag.gettopalbums&tag=edm&api_key=d1000af359abdc5da2cf58cb576e8c75&format=json`;
+const ERR = 'Нам очень жаль, но произошла ошибка. Пожалуйста, посмотрите выше тип ошибки (┬┬﹏┬┬)'
 
 /** Вызов главного метода */
 getTop();
@@ -23,11 +24,16 @@ document.querySelector(".header__search").addEventListener("keydown", (e) => {
 					content.textContent = "";
 					let heading = document.querySelector(".name");
 					heading.textContent = "Результаты поиска: ";
-					result.results.trackmatches.track.forEach((item) => {
-						searchValues(item);
-					});
+					if (typeof result === 'undefined') {
+						console.log(ERR);
+					}
+					else {
+						result.results.trackmatches.track.forEach((item) => {
+							searchValues(item);
+						});
+					}
 				})
-				.catch((e) => console.log(e));
+				// (e) => console.log(e));
 		}
 	}
 });
@@ -42,10 +48,16 @@ function getData(url) {
 
 /** Обработка информации о топ-исполнителях  */
 function getTop() {
-	getData(MAIN_URL).then((data) =>
-		data.albums.album.forEach((item) => {
-			topArtists(item);
-		})
+	getData(MAIN_URL).then((data) => {
+		if (typeof data === 'undefined') {
+			console.log(ERR);
+		}
+		else {
+			data.albums.album.forEach((item) => {
+				topArtists(item);
+			})
+		}
+	}
 	);
 }
 
