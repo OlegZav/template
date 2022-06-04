@@ -33,7 +33,6 @@ document.querySelector(".header__search").addEventListener("keydown", (e) => {
 						});
 					}
 				})
-				// (e) => console.log(e));
 		}
 	}
 });
