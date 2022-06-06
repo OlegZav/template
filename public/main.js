@@ -1,6 +1,6 @@
 /** Необходимые константы */
 const KEY = "d1000af359abdc5da2cf58cb576e8c75";
-const MAIN_URL = `http://ws.audioscrobbler.com/2.0/?method=tag.gettopalbums&tag=edm&api_key=d1000af359abdc5da2cf58cb576e8c75&format=json`;
+const MAIN_URL = `https://ws.audioscrobbler.com/2.0/?method=tag.gettopalbums&tag=edm&api_key=d1000af359abdc5da2cf58cb576e8c75&format=json`;
 const ERR = 'Нам очень жаль, но произошла ошибка. Пожалуйста, посмотрите выше тип ошибки (┬┬﹏┬┬)'
 
 /** Вызов главного метода */
@@ -10,19 +10,19 @@ getTop();
 document.querySelector(".header__search").addEventListener("keydown", (e) => {
 	if (e.keyCode === 13) {
 		if (e.target.value === "") {
-			let content = document.querySelector(".content-body");
+			const content = document.querySelector(".content-body");
 			content.textContent = "";
-			let heading = document.querySelector(".name");
+			const heading = document.querySelector(".name");
 			heading.textContent = "Популярные исполнители: ";
 			getTop();
 		} else {
 			getData(
-					`http://ws.audioscrobbler.com/2.0/?method=track.search&limit=100&track=${e.target.value}&api_key=${KEY}&format=json`
+					`https://ws.audioscrobbler.com/2.0/?method=track.search&limit=100&track=${e.target.value}&api_key=${KEY}&format=json`
 				)
 				.then((result) => {
-					let content = document.querySelector(".content-body");
+					const content = document.querySelector(".content-body");
 					content.textContent = "";
-					let heading = document.querySelector(".name");
+					const heading = document.querySelector(".name");
 					heading.textContent = "Результаты поиска: ";
 					if (typeof result === 'undefined') {
 						console.log(ERR);
@@ -62,7 +62,7 @@ function getTop() {
 
 /** Создание карточек с информацией о популярных композициях */
 function topArtists(item) {
-	let container = document.querySelector(".content-body");
+	const container = document.querySelector(".content-body");
 
 	let element = document.createElement("div");
 	let artistData = document.createElement('div');
@@ -122,7 +122,7 @@ function addArtist(item) {
 	dataAlbum.className = "data";
 
 	dataAlbum.appendChild(addArtistLabel());
-	dataAlbum.appendChild(addArtistValue(item));
+	dataAlbum.appendChild(addValue(item, 'artist'));
 
 	return dataAlbum;
 }
@@ -148,19 +148,21 @@ function addArtistLabel() {
 }
 
 /** Создание значения-ссылки об исполнителе */
-function addArtistValue(item) {
-	let pAlbumNumber = document.createElement('p');
+function addValue(item, choice) {
+	let pValue = document.createElement('p');
 	let aElement = document.createElement("a");
 
-	pAlbumNumber.className = "playlist-name number";
+	pValue.className = "playlist-name number";
 
 	aElement.href = item.url;
 	aElement.className = "value";
 
-	pAlbumNumber.appendChild(aElement);
-	aElement.appendChild(document.createTextNode(item.artist.name));
-
-	return pAlbumNumber;
+	pValue.appendChild(aElement);
+	if (choice == 'artist')
+		aElement.appendChild(document.createTextNode(item.artist.name));
+	if (choice == 'listener')
+		aElement.appendChild(document.createTextNode(item.listeners));
+	return pValue;
 }
 
 /** Создание поля позиции трека */
@@ -215,7 +217,7 @@ function addContainerListener(item) {
 
 	dataContainer.appendChild(dataAlbum);
 	dataAlbum.appendChild(addListenerLabel());
-	dataAlbum.appendChild(addListenerValue(item));
+	dataAlbum.appendChild(addValue(item, 'listener'));
 
 	return dataContainer;
 }
@@ -228,25 +230,9 @@ function addListenerLabel() {
 	return pAlbum;
 }
 
-/** Создание значения-ссылки о прослушиваниях */
-function addListenerValue(item) {
-	let pAlbumNumber = document.createElement('p');
-	let aElement = document.createElement("a");
-
-	pAlbumNumber.className = "playlist-name number";
-
-	aElement.href = item.url;
-	aElement.className = "value";
-
-	pAlbumNumber.appendChild(aElement);
-	aElement.appendChild(document.createTextNode(item.listeners));
-
-	return pAlbumNumber;
-}
-
 /** Создание результатов поиска */
 function searchValues(item) {
-	let container = document.querySelector(".content-body");
+	const container = document.querySelector(".content-body");
 
 	let element = document.createElement("div");
 	let artistData = document.createElement('div');
