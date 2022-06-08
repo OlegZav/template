@@ -1,9 +1,9 @@
 import React from "react";
-import { Context } from "../context";
+import { HeaderContext } from "../context";
 import { useContext } from "react";
 
 function Header() {
-  const { setSearchData, setSearchString } = useContext(Context);
+  const { setSearchData } = useContext(HeaderContext);
 
   function getApiData(url) {
     return fetch(url)
@@ -12,11 +12,13 @@ function Header() {
   }
 
   function getResult(value) {
-    getApiData(
-      `https://ws.audioscrobbler.com/2.0/?method=track.search&limit=100&track=${value}&api_key=d1000af359abdc5da2cf58cb576e8c75&format=json`
-    ).then((data) => {
-      return setSearchData(data.results.trackmatches.track);
-    });
+    if (value !== "") {
+      getApiData(
+        `https://ws.audioscrobbler.com/2.0/?method=track.search&limit=100&track=${value}&api_key=d1000af359abdc5da2cf58cb576e8c75&format=json`
+      ).then((data) => {
+        return setSearchData(data.results.trackmatches.track);
+      });
+    } else setSearchData([]);
   }
   return (
     <header className="header">
@@ -30,7 +32,6 @@ function Header() {
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             getResult(e.target.value);
-            setSearchString(e.target.value);
           }
         }}
         />

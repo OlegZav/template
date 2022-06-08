@@ -1,5 +1,3 @@
-import React from "react";
-
 function TopCard({ data }) {
   return (
     <div className="card">

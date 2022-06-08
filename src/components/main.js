@@ -1,12 +1,10 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
-import { useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import TopCard from "./topCard";
 import Card from "./Card";
-import { Context } from "../context";
+import { MainContext } from "../context";
 function Main() {
   const [topArtists, setTopArtists] = useState([]);
-  const { searchData, searchString } = useContext(Context);
+  const { searchData } = useContext(MainContext);
   const getTopUrl = "https://ws.audioscrobbler.com/2.0/?method=tag.gettopalbums&tag=edm&api_key=d1000af359abdc5da2cf58cb576e8c75&format=json";
   const ERR = 'Нам очень жаль, но произошла ошибка. Пожалуйста, посмотрите выше тип ошибки (┬┬﹏┬┬)';
 
@@ -31,7 +29,7 @@ function Main() {
       .catch((e) => console.log(e));
   }
   
-  if (searchString === "") {
+  if (searchData.length === 0) {
     return (
       <main className="content">
         <h2 className="name">Топ исполнителей: </h2>
