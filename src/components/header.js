@@ -4,6 +4,8 @@ import { useContext } from "react";
 
 function Header() {
   const { setSearchData } = useContext(HeaderContext);
+  const ERR = 'Нам очень жаль, но произошла ошибка. Пожалуйста, посмотрите выше тип ошибки (┬┬﹏┬┬)';
+
 
   function getApiData(url) {
     return fetch(url)
@@ -16,7 +18,12 @@ function Header() {
       getApiData(
         `https://ws.audioscrobbler.com/2.0/?method=track.search&limit=100&track=${value}&api_key=d1000af359abdc5da2cf58cb576e8c75&format=json`
       ).then((data) => {
-        return setSearchData(data.results.trackmatches.track);
+        if (typeof data === 'undefined') {
+          console.log(ERR);
+        }
+        else {
+          return setSearchData(data.results.trackmatches.track);
+        }
       });
     } else setSearchData([]);
   }
