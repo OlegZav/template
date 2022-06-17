@@ -1,16 +1,11 @@
 import React from 'react';
 import {useContext} from "react";
 import {Context} from "../context";
+import { getApiData } from "./getData";
 
 function Request() {
     const ERR = 'Нам очень жаль, но произошла ошибка. Пожалуйста, посмотрите выше тип ошибки (┬┬﹏┬┬)'
     const { setSearchData } = useContext(Context);
-
-    function getApiData(url) {
-        return fetch(url)
-            .then((res) => res.json())
-            .catch((e) => console.log(e));
-    }
 
     function getResult(value) {
         if (value !== "") {
